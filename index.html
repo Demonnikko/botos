@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Illusionist Store</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text-color: #ffffff;
+            --accent-color: #9d4edd;
+            --secondary-text: #a0a0a0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-top: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, #fff, #e0aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--secondary-text);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon { font-size: 32px; }
+        
+        .info { flex: 1; }
+        .title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+        .desc { font-size: 13px; color: var(--secondary-text); line-height: 1.4; }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .price { font-size: 16px; font-weight: 700; color: #e0aaff; }
+
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Illusionist OS</h1>
+            <p class="subtitle">Цифровой арсенал</p>
+        </header>
+
+        <!-- Товар 1 -->
+        <div class="card" onclick="buyItem('calculator')">
+            <div class="card-header">
+                <div class="icon">🧮</div>
+                <div class="info">
+                    <div class="title">Mental Calculator</div>
+                    <div class="desc">Секретное оружие. Форсирование чисел и чтение мыслей.</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="price">7 990 ₽</div>
+                <button class="btn">Купить</button>
+            </div>
+        </div>
+
+        <!-- Товар 2 -->
+        <div class="card" onclick="buyItem('calendar')">
+            <div class="card-header">
+                <div class="icon">📅</div>
+                <div class="info">
+                    <div class="title">Chronos Calendar</div>
+                    <div class="desc">Эффект предсказания даты в телефоне зрителя.</div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="price">6 990 ₽</div>
+                <button class="btn">Купить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Раскрыть на весь экран
+
+        // Применяем цвета темы Telegram, если они есть
+        if (tg.themeParams) {
+            if (tg.themeParams.bg_color) document.documentElement.style.setProperty('--bg-color', tg.themeParams.bg_color);
+            if (tg.themeParams.text_color) document.documentElement.style.setProperty('--text-color', tg.themeParams.text_color);
+            if (tg.themeParams.button_color) document.documentElement.style.setProperty('--accent-color', tg.themeParams.button_color);
+        }
+
+        function buyItem(itemId) {
+            // Вибрация при нажатии (если поддерживается)
+            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            
+            // Отправляем данные боту
+            tg.sendData(JSON.stringify({ action: 'buy', id: itemId }));
+        }
+    </script>
+</body>
+</html>
