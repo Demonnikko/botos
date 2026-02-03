@@ -1,162 +1,529 @@
+<!doctype html>
 <!DOCTYPE html>
 <html lang="ru">
-<head>
+  <head>
+    <meta charset="UTF-8" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Illusionist Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg-color: #0f0f13;
-            --card-bg: rgba(255, 255, 255, 0.08);
-            --text-color: #ffffff;
-            --accent-color: #9d4edd;
-            --secondary-text: #a0a0a0;
+      :root {
+        --bg-color: #0f0f13;
+        --card-bg: rgba(255, 255, 255, 0.08);
+        --text-color: #ffffff;
+        --accent-color: #9d4edd;
+        --secondary-text: #a0a0a0;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        background: radial-gradient(circle at 50% 0%, #1a1a24, var(--bg-color));
+        color: var(--text-color);
+        overflow-x: hidden;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .container {
+        padding: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        padding-top: 10px;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(45deg, #fff, #e0aaff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p.subtitle {
+        color: var(--secondary-text);
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+        align-items: center;
+        text-align: center;
+      }
+
+      .card:active {
+        transform: scale(0.98);
+      }
+
+      .card-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-color);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 20px rgba(157, 78, 221, 0.1);
+      }
+      .icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .info {
+        width: 100%;
+      }
+      .title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        line-height: 1.2;
+      }
+      .desc {
+        font-size: 11px;
+        color: var(--secondary-text);
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        margin-top: auto;
+      }
+
+      .price {
+        font-size: 16px;
+        font-weight: 700;
+        color: #e0aaff;
+      }
+
+      .btn {
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 10px 0;
+        width: 100%;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Стили для анимации загрузки */
+      .btn.loading {
+        color: transparent; /* Скрываем текст */
+        pointer-events: none; /* Блокируем повторные нажатия */
+        position: relative;
+      }
+
+      .btn.loading::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 16px;
+        height: 16px;
+        margin-left: -8px;
+        margin-top: -8px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
+      /* Бейджи */
+      .badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        z-index: 2;
+      }
+      .badge.hit {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: #000;
+        box-shadow: 0 2px 10px rgba(245, 158, 11, 0.2);
+      }
+      .badge.new {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: #fff;
+        box-shadow: 0 2px 10px rgba(59, 130, 246, 0.2);
+      }
+
+      /* Заставка (Splash Screen) */
+      #splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 0%, #2a1a3a, #0f0f13);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.6s ease-out;
+      }
+      .splash-content {
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+      }
+      .splash-logo {
+        font-size: 64px;
+        margin-bottom: 16px;
+        animation: float 3s ease-in-out infinite;
+        color: #e0aaff;
+      }
+      #splash-screen h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+        background: linear-gradient(45deg, #fff, #e0aaff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      #splash-screen p {
+        color: var(--secondary-text);
+        font-size: 14px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
         }
-
-        .container {
-            padding: 16px;
-            max-width: 600px;
-            margin: 0 auto;
+        50% {
+          transform: translateY(-10px);
         }
-
-        header {
-            text-align: center;
-            margin-bottom: 24px;
-            padding-top: 10px;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(45deg, #fff, #e0aaff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        p.subtitle {
-            color: var(--secondary-text);
-            font-size: 14px;
-            margin-top: 5px;
-        }
+      /* Фон с частицами */
+      #particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+      }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .icon { font-size: 32px; }
-        
-        .info { flex: 1; }
-        .title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
-        .desc { font-size: 13px; color: var(--secondary-text); line-height: 1.4; }
-
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-        }
-
-        .price { font-size: 16px; font-weight: 700; color: #e0aaff; }
-
-        .btn {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+      /* Кнопка поддержки */
+      .support-btn {
+        margin-top: 24px;
+        margin-bottom: 16px;
+        width: 100%;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: var(--secondary-text);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+      }
+      .support-btn:active {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(0.98);
+      }
     </style>
+  </head>
+  <body>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Illusionist OS</h1>
-            <p class="subtitle">Цифровой арсенал</p>
-        </header>
+    <!-- Заставка -->
+    <div id="splash-screen">
+      <div class="splash-content">
+        <div class="splash-logo">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="64"
+            height="64"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M2 18h20"></path>
+            <path d="M5 18v-9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v9"></path>
+            <path d="M5 14h14"></path>
+          </svg>
+        </div>
+        <h1>Illusionist OS</h1>
+        <p>Экосистема для артистов</p>
+      </div>
+    </div>
 
+    <!-- Холст для частиц -->
+    <canvas id="particles"></canvas>
+
+    <div class="container">
+      <header>
+        <h1>Illusionist OS</h1>
+        <p class="subtitle">Цифровой арсенал</p>
+      </header>
+
+      <div class="grid">
         <!-- Товар 1 -->
-        <div class="card" onclick="buyItem('calculator')">
-            <div class="card-header">
-                <div class="icon">🧮</div>
-                <div class="info">
-                    <div class="title">Mental Calculator</div>
-                    <div class="desc">Секретное оружие. Форсирование чисел и чтение мыслей.</div>
-                </div>
+        <div class="card" onclick="buyItem('calculator', this)">
+          <div class="badge hit">Хит продаж</div>
+          <div class="card-header">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                <line x1="8" y1="6" x2="16" y2="6"></line>
+                <line x1="16" y1="14" x2="16" y2="18"></line>
+                <path d="M16 10h.01"></path>
+                <path d="M12 10h.01"></path>
+                <path d="M8 10h.01"></path>
+                <path d="M12 14h.01"></path>
+                <path d="M8 14h.01"></path>
+                <path d="M12 18h.01"></path>
+                <path d="M8 18h.01"></path>
+              </svg>
             </div>
-            <div class="footer">
-                <div class="price">7 990 ₽</div>
-                <button class="btn">Купить</button>
+            <div class="info">
+              <div class="title">Калькулятор</div>
+              <div class="desc">
+                Секретное оружие менталиста. Форсирование чисел и чтение мыслей.
+              </div>
             </div>
+          </div>
+          <div class="footer">
+            <div class="price">7 990 ₽</div>
+            <button class="btn">Купить</button>
+          </div>
         </div>
 
         <!-- Товар 2 -->
-        <div class="card" onclick="buyItem('calendar')">
-            <div class="card-header">
-                <div class="icon">📅</div>
-                <div class="info">
-                    <div class="title">Chronos Calendar</div>
-                    <div class="desc">Эффект предсказания даты в телефоне зрителя.</div>
-                </div>
+        <div class="card" onclick="buyItem('calendar', this)">
+          <div class="badge new">New</div>
+          <div class="card-header">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
             </div>
-            <div class="footer">
-                <div class="price">6 990 ₽</div>
-                <button class="btn">Купить</button>
+            <div class="info">
+              <div class="title">Календарь</div>
+              <div class="desc">
+                Эффект предсказания даты. Зритель называет дату, она уже
+                отмечена в вашем телефоне.
+              </div>
             </div>
+          </div>
+          <div class="footer">
+            <div class="price">6 990 ₽</div>
+            <button class="btn">Купить</button>
+          </div>
         </div>
+      </div>
+
+      <!-- Кнопка поддержки -->
+      <div class="support-btn" onclick="openSupport()">
+        🆘 Нужна помощь? Написать лично
+      </div>
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Раскрыть на весь экран
+      const tg = window.Telegram.WebApp;
+      tg.expand(); // Раскрыть на весь экран
 
-        // Применяем цвета темы Telegram, если они есть
-        if (tg.themeParams) {
-            if (tg.themeParams.bg_color) document.documentElement.style.setProperty('--bg-color', tg.themeParams.bg_color);
-            if (tg.themeParams.text_color) document.documentElement.style.setProperty('--text-color', tg.themeParams.text_color);
-            if (tg.themeParams.button_color) document.documentElement.style.setProperty('--accent-color', tg.themeParams.button_color);
+      // Применяем цвета темы Telegram, если они есть
+      if (tg.themeParams) {
+        if (tg.themeParams.bg_color)
+          document.documentElement.style.setProperty(
+            "--bg-color",
+            tg.themeParams.bg_color,
+          );
+        if (tg.themeParams.text_color)
+          document.documentElement.style.setProperty(
+            "--text-color",
+            tg.themeParams.text_color,
+          );
+        if (tg.themeParams.button_color)
+          document.documentElement.style.setProperty(
+            "--accent-color",
+            tg.themeParams.button_color,
+          );
+      }
+
+      function buyItem(itemId, element) {
+        // Вибрация при нажатии (если поддерживается)
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
+
+        // Включаем анимацию загрузки на кнопке
+        if (element) {
+          const btn = element.querySelector(".btn");
+          if (btn) btn.classList.add("loading");
         }
 
-        function buyItem(itemId) {
-            // Вибрация при нажатии (если поддерживается)
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-            
-            // Отправляем данные боту
-            tg.sendData(JSON.stringify({ action: 'buy', id: itemId }));
+        // Небольшая задержка перед отправкой, чтобы пользователь увидел анимацию
+        setTimeout(() => {
+          tg.sendData(JSON.stringify({ action: "buy", id: itemId }));
+        }, 500);
+      }
+
+      function openSupport() {
+        // Замените demonnikko на ваш реальный юзернейм (без @)
+        tg.openTelegramLink("https://t.me/demonnikko");
+      }
+
+      // Логика заставки
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          const splash = document.getElementById("splash-screen");
+          splash.style.opacity = "0";
+          setTimeout(() => splash.remove(), 600);
+        }, 2000); // Заставка висит 2 секунды
+      });
+
+      // Магические частицы
+      const canvas = document.getElementById("particles");
+      const ctx = canvas.getContext("2d");
+
+      let width, height;
+
+      function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener("resize", resize);
+      resize();
+
+      const particles = [];
+      const particleCount = 50; // Количество частиц
+
+      class Particle {
+        constructor() {
+          this.reset();
         }
+        reset() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * 0.5; // Скорость по X
+          this.vy = (Math.random() - 0.5) * 0.5; // Скорость по Y
+          this.size = Math.random() * 2 + 1;
+          this.alpha = Math.random() * 0.5 + 0.1;
+          this.fade = Math.random() * 0.01 + 0.005;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.alpha -= this.fade;
+          if (this.alpha <= 0) this.reset();
+        }
+        draw() {
+          ctx.fillStyle = `rgba(157, 78, 221, ${this.alpha})`; // Ваш акцентный цвет #9d4edd
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
     </script>
-</body>
+  </body>
 </html>
