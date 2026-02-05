@@ -466,11 +466,12 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 100dvh;
       background: var(--bg-color);
       z-index: 1000;
       overflow-y: auto;
-      padding-bottom: 100px;
+      overscroll-behavior: contain;
+      padding-bottom: 150px;
       /* Место под кнопку */
       display: none;
       flex-direction: column;
