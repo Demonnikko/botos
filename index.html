@@ -471,7 +471,8 @@
       z-index: 1000;
       overflow-y: auto;
       overscroll-behavior: contain;
-      padding-bottom: 150px;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 250px;
       /* Место под кнопку */
       display: none;
       flex-direction: column;
@@ -573,6 +574,7 @@
       <div class="product-title"></div>
       <div class="product-price"></div>
       <div class="product-description"></div>
+      <div style="height: 150px; width: 100%;"></div> <!-- SPACER FOR SCROLLING -->
     </div>
     <div class="product-buy-btn-container">
       <button class="btn" id="product-buy-btn">Купить</button>
@@ -650,23 +652,16 @@
 
 
 
-      <!-- Заглушка: Заметки -->
+      <!-- Заглушка 1 -->
       <div class="card disabled">
         <div class="badge soon">Скоро</div>
         <div class="card-header">
           <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
+            <span style="font-size: 24px; color: var(--accent-color);">?</span>
           </div>
           <div class="info">
-            <div class="title">Заметки</div>
-            <div class="desc">Храните идеи и сценарии в одном месте.</div>
+            <div class="title">?</div>
+            <div class="desc">Скоро...</div>
           </div>
         </div>
         <div class="footer">
@@ -674,20 +669,16 @@
         </div>
       </div>
 
-      <!-- Заглушка: Напоминания -->
+      <!-- Заглушка 2 -->
       <div class="card disabled">
         <div class="badge soon">Скоро</div>
         <div class="card-header">
           <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-            </svg>
+            <span style="font-size: 24px; color: var(--accent-color);">?</span>
           </div>
           <div class="info">
-            <div class="title">Напоминания</div>
-            <div class="desc">Умные уведомления о делах и репетициях.</div>
+            <div class="title">?</div>
+            <div class="desc">Скоро...</div>
           </div>
         </div>
         <div class="footer">
@@ -695,22 +686,16 @@
         </div>
       </div>
 
-      <!-- Заглушка: CRM-система -->
+      <!-- Заглушка 3 -->
       <div class="card disabled">
         <div class="badge soon">Скоро</div>
         <div class="card-header">
           <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
+            <span style="font-size: 24px; color: var(--accent-color);">?</span>
           </div>
           <div class="info">
-            <div class="title">CRM-система</div>
-            <div class="desc">Управление базой клиентов и сделками.</div>
+            <div class="title">?</div>
+            <div class="desc">Скоро...</div>
           </div>
         </div>
         <div class="footer">
@@ -718,20 +703,16 @@
         </div>
       </div>
 
-      <!-- Заглушка: Библиотека -->
+      <!-- Заглушка 4 -->
       <div class="card disabled">
         <div class="badge soon">Скоро</div>
         <div class="card-header">
           <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
+            <span style="font-size: 24px; color: var(--accent-color);">?</span>
           </div>
           <div class="info">
-            <div class="title">Библиотека</div>
-            <div class="desc">База знаний и обучающие материалы.</div>
+            <div class="title">?</div>
+            <div class="desc">Скоро...</div>
           </div>
         </div>
         <div class="footer">
@@ -886,7 +867,17 @@
 
       // Небольшая задержка перед отправкой, чтобы пользователь увидел анимацию
       setTimeout(() => {
-        tg.sendData(JSON.stringify({ action: "buy", id: itemId }));
+        try {
+          tg.sendData(JSON.stringify({ action: "buy", id: itemId }));
+          // На случай, если окно не закроется само (в старых версиях)
+          setTimeout(() => tg.close(), 100);
+        } catch (e) {
+          alert("Ошибка отправки данных: " + e.message);
+          if (element) {
+            const btn = element.querySelector(".btn");
+            if (btn) btn.classList.remove("loading");
+          }
+        }
       }, 500);
     }
 
