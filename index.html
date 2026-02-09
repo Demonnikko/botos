@@ -591,7 +591,7 @@
     </header>
 
     <div class="grid">
-      <!-- Товар 1: Калькулятор (Первый) -->
+      <!-- Товар 1: Калькулятор -->
       <div class="card" onclick="openProduct('calculator')">
         <div class="badge business">Business</div>
         <div class="card-header">
@@ -613,19 +613,19 @@
           <div class="info">
             <div class="title">Калькулятор</div>
             <div class="desc">
-              Мгновенные КП • Логистика • Динамические цены.
+              Мгновенные КП • Финансовая аналитика • Чистая прибыль
             </div>
           </div>
         </div>
         <div class="footer">
-          <div class="price">7 990 ₽</div>
+          <div class="price">7 990 ₽ <span style="font-size: 12px; opacity: 0.7;">навсегда</span></div>
           <button class="btn">Подробнее</button>
         </div>
       </div>
 
-      <!-- Товар 2: Календарь (Второй) -->
+      <!-- Товар 2: Календарь (Предпродажа) -->
       <div class="card" onclick="openProduct('calendar')">
-        <div class="badge hit">Хит продаж</div>
+        <div class="badge" style="background: linear-gradient(135deg, #ef4444, #f97316);">🔥 Предпродажа</div>
         <div class="card-header">
           <div class="icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -639,18 +639,41 @@
           <div class="info">
             <div class="title">Календарь</div>
             <div class="desc">
-              Умный график артиста. Логистика, чек-листы реквизита и защита от
-              накладок.
+              Умный график артиста • Чек-листы реквизита • Защита от накладок
             </div>
           </div>
         </div>
         <div class="footer">
-          <div class="price">6 990 ₽</div>
-          <button class="btn">Подробнее</button>
+          <div class="price">
+            <span style="text-decoration: line-through; opacity: 0.5; font-size: 14px;">6 990 ₽</span>
+            <span style="color: #22c55e; font-weight: bold;"> 3 990 ₽</span>
+          </div>
+          <button class="btn">до 28 февраля</button>
         </div>
       </div>
 
-
+      <!-- Товар 3: Комплект -->
+      <div class="card" onclick="openProduct('bundle')" style="border: 2px solid var(--accent-color);">
+        <div class="badge" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">💎 Выгодно</div>
+        <div class="card-header">
+          <div class="icon">
+            <span style="font-size: 28px;">🎁</span>
+          </div>
+          <div class="info">
+            <div class="title">Комплект</div>
+            <div class="desc">
+              Калькулятор + Календарь — полная экосистема для артиста
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="price">
+            <span style="text-decoration: line-through; opacity: 0.5; font-size: 14px;">14 980 ₽</span>
+            <span> 11 990 ₽</span>
+          </div>
+          <button class="btn" style="background: linear-gradient(135deg, #f59e0b, #f97316);">-2 990 ₽</button>
+        </div>
+      </div>
 
       <!-- Заглушка: Скоро -->
       <div class="card disabled">
